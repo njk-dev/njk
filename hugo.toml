@@ -1,0 +1,12 @@
+baseURL = 'https://njk.dev/'
+locale = 'en-us'
+title = 'njk.'
+
+# No theme — layouts live at project level
+# Two pages: / and /404.html. Nothing else until there is something to say.
+# (sitemap stays on — unlinked, at the default /sitemap.xml)
+disableKinds = ['taxonomy', 'term', 'rss', 'section', 'page']
+
+[params]
+  description = 'credo ut intelligam.'
+  author = 'Nathaniel'

@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{{ .Site.Title }}</title>
+  <meta name="description" content="{{ .Site.Params.description }}">
+  <meta name="author" content="{{ .Site.Params.author }}">
+
+  <!-- Open Graph -->
+  <meta property="og:title" content="{{ .Site.Title }}">
+  <meta property="og:description" content="{{ .Site.Params.description }}">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="{{ .Site.BaseURL }}">
+  <meta property="og:image" content="{{ .Site.BaseURL }}og-image.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:image:alt" content="njk. — credo ut intelligam — Catholic by creed. Unix by choice. Tech by habit.">
+
+  <!-- Twitter Card -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="{{ .Site.Title }}">
+  <meta name="twitter:description" content="{{ .Site.Params.description }}">
+  <meta name="twitter:image" content="{{ .Site.BaseURL }}og-image.png">
+  <meta name="twitter:image:alt" content="njk. — credo ut intelligam — Catholic by creed. Unix by choice. Tech by habit.">
+
+  <link rel="canonical" href="{{ .Site.BaseURL }}">
+  <meta name="color-scheme" content="dark light">
+  <meta name="theme-color" content="#232320">
+
+  <!-- Favicon (SVG preferred; PNG for browsers without SVG favicon support) -->
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+  <link rel="icon" href="/favicon.png" type="image/png" sizes="64x64">
+
+  <!-- Mode: dark is default; light via [data-mode="light"], OS-driven with a manual override -->
+  <script>
+    (function () {
+      var m = null;
+      try { m = localStorage.getItem('mode'); } catch (e) {}
+      if (!m && matchMedia('(prefers-color-scheme: light)').matches) m = 'light';
+      if (m === 'light') document.documentElement.setAttribute('data-mode', 'light');
+    })();
+  </script>
+
+  <!-- The roll: one temper per visit, set before paint. No persistence — the loop is the point. -->
+  <script>
+    (function () {
+      var tempers = [
+        ['gold', 'dwell'], ['orange', 'spark'], ['teal', 'reference'],
+        ['violet', 'reading'], ['green', 'project'], ['gray', 'log']
+      ];
+      var pick = tempers[Math.floor(Math.random() * tempers.length)];
+      document.documentElement.style.setProperty('--acc', 'var(--t-' + pick[0] + ')');
+      window.__roll = pick;
+    })();
+  </script>
+
+  <!-- Font preloads -->
+  <link rel="preload" href="/fonts/IBMPlexMono-Light.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="/fonts/IBMPlexMono-Regular.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="/fonts/IBMPlexMono-SemiBold.woff2" as="font" type="font/woff2" crossorigin>
+
+  <!-- Styles -->
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+  <div class="spine"></div>
+  <main class="page">
+    <header class="running-head">
+      <div class="breadcrumb">njk.dev <span class="crumb-sep">/</span> <span class="crumb-leaf">home</span></div>
+      <div class="folio">fol. 01</div>
+    </header>
+
+    <h1 class="wordmark"><span class="wm wm-n">n</span><span class="wm wm-j">j</span><span class="wm wm-k">k</span><span class="wm-dot">.</span></h1>
+    <p class="motto">credo ut intelligam</p>
+
+    <p class="creed">
+      Catholic by <span class="creed-faith">creed.</span><br>
+      Unix by <span class="creed-unix" title="macOS for now. Linux eventually. Unix always.">choice.</span><br>
+      Tech by <span class="creed-tech">habit.</span>
+    </p>
+
+    <section class="now">
+      <div class="now-label">:: now</div>
+      <div class="now-items">{{ delimit (apply .Params.now "markdownify" ".") " · " | safeHTML }}</div>
+    </section>
+
+    <nav class="links">
+      {{ range .Params.links -}}
+      <a href="{{ .url }}"><span class="arrow">-&gt;</span> {{ .label }}</a>
+      {{ end -}}
+    </nav>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        <div class="mark" title="he rolls again next visit"></div>
+        <div class="colophon">
+          <div class="day-line">the jackalope, <span id="celestial-prep">under the</span> <button class="mode-toggle" id="mode-toggle" role="switch" aria-checked="false" aria-label="moon — switch to light mode">moon</button>, chose <span class="day-name" id="day-name">gold</span> · <span id="day-word">dwell</span></div>
+        </div>
+      </div>
+    </footer>
+  </main>
+
+  <script>
+    (function () {
+      // write the day into the footer — color never travels without a word
+      var pick = window.__roll || ['gold', 'dwell'];
+      document.getElementById('day-name').textContent = pick[0];
+      document.getElementById('day-word').textContent = pick[1];
+      var hex = getComputedStyle(document.documentElement).getPropertyValue('--t-' + pick[0]).trim();
+      console.log('%ccredo ut intelligam — you found the console. the jackalope approves.',
+        'color:' + hex + ';font-family:monospace;');
+
+      // the moon/sun phrase: manual mode override, persisted
+      var root = document.documentElement;
+      var toggle = document.getElementById('mode-toggle');
+      var prep = document.getElementById('celestial-prep');
+      function paint() {
+        var light = root.getAttribute('data-mode') === 'light';
+        prep.textContent = light ? 'in the' : 'under the';
+        toggle.textContent = light ? 'sun' : 'moon';
+        toggle.setAttribute('aria-label', light ? 'sun — switch to dark mode' : 'moon — switch to light mode');
+        toggle.setAttribute('aria-checked', light ? 'true' : 'false');
+        var tc = document.querySelector('meta[name="theme-color"]');
+        if (tc) tc.content = light ? '#f3f1ea' : '#232320';
+      }
+      toggle.addEventListener('click', function () {
+        var next = root.getAttribute('data-mode') === 'light' ? 'dark' : 'light';
+        if (next === 'light') root.setAttribute('data-mode', 'light');
+        else root.removeAttribute('data-mode');
+        paint();
+        try {
+          // choosing the OS's own mode clears the override — back to following the system
+          var os = matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark';
+          if (next === os) localStorage.removeItem('mode');
+          else localStorage.setItem('mode', next);
+        } catch (e) {}
+      });
+      paint();
+    })();
+  </script>
+</body>
+</html>
