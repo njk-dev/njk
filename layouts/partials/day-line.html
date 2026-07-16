@@ -1,0 +1,34 @@
+{{- /* The day line: the moon/sun phrase — the manual mode override, inline in the
+     footer sentence. Pass "before"/"after" HTML fragments to shape each page's
+     sentence around the celestial phrase. */ -}}
+{{- /* the switch keeps a stable accessible name ("light mode"); state rides
+     aria-checked, the moon/sun word is presentation */ -}}
+<div class="day-line">{{ with .before }}{{ . | safeHTML }}{{ end }}<span id="celestial-prep">under the</span> <button class="mode-toggle" id="mode-toggle" role="switch" aria-checked="false" aria-label="light mode">moon</button>{{ with .after }}{{ . | safeHTML }}{{ end }}</div>
+<script>
+  (function () {
+    var root = document.documentElement;
+    var toggle = document.getElementById('mode-toggle');
+    var prep = document.getElementById('celestial-prep');
+    function paint() {
+      var light = root.getAttribute('data-mode') === 'light';
+      prep.textContent = light ? 'in the' : 'under the';
+      toggle.textContent = light ? 'sun' : 'moon';
+      toggle.setAttribute('aria-checked', light ? 'true' : 'false');
+      var tc = document.querySelector('meta[name="theme-color"]');
+      if (tc) tc.content = light ? '#f3f1ea' : '#232320';
+    }
+    toggle.addEventListener('click', function () {
+      var next = root.getAttribute('data-mode') === 'light' ? 'dark' : 'light';
+      if (next === 'light') root.setAttribute('data-mode', 'light');
+      else root.removeAttribute('data-mode');
+      paint();
+      try {
+        // choosing the OS's own mode clears the override — back to following the system
+        var os = matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark';
+        if (next === os) localStorage.removeItem('mode');
+        else localStorage.setItem('mode', next);
+      } catch (e) {}
+    });
+    paint();
+  })();
+</script>

@@ -1,0 +1,45 @@
+{{- /* a musical example — ex. {n}, its own roman count. One plate per piece,
+     however many providers carry it. Resting: title + work, no iframe, no
+     third-party request. The caption's source words are the controls; the
+     player script (partials/music-player.html) loads the chosen door.
+     usage: music title="..." subtitle="..." work="..." caption="..." n="i"
+            apple="url" spotify="url" youtube="url"   (any subset of providers) */ -}}
+{{- $title := .Get "title" -}}
+{{- $subtitle := .Get "subtitle" -}}
+{{- $work := .Get "work" -}}
+{{- $caption := .Get "caption" -}}
+{{- $n := .Get "n" -}}
+{{- $apple := .Get "apple" -}}
+{{- $spotify := .Get "spotify" -}}
+{{- $youtube := .Get "youtube" -}}
+{{- if not $title }}{{ errorf "music: every example names its piece — title is required (%s)" .Position }}{{ end -}}
+{{- if not $caption }}{{ errorf "music: no plate without a word — caption is required (%s)" .Position }}{{ end -}}
+{{- if not $n }}{{ errorf "music: examples number per essay in roman — n is required (%s)" .Position }}{{ end -}}
+{{- if not (or $apple $spotify $youtube) }}{{ errorf "music: at least one provider url (apple / spotify / youtube) is required (%s)" .Position }}{{ end -}}
+{{- if and $apple (not (findRE `^https://(geo\.)?music\.apple\.com/` $apple)) }}{{ errorf "music: apple wants the https://music.apple.com page url (not an embed url), got %q (%s)" $apple .Position }}{{ end -}}
+{{- if and $spotify (or (not (findRE `^https://open\.spotify\.com/` $spotify)) (strings.Contains $spotify "/embed/")) }}{{ errorf "music: spotify wants the https://open.spotify.com page url (not an embed url), got %q (%s)" $spotify .Position }}{{ end -}}
+{{- if $youtube -}}
+  {{- $vid := replaceRE `^.*(?:youtu\.be/|[?&]v=|/embed/|/shorts/|/live/)([A-Za-z0-9_-]+).*$` "$1" $youtube -}}
+  {{- if not (findRE `^[A-Za-z0-9_-]{6,}$` $vid) }}{{ errorf "music: could not read a youtube id from %q (%s)" $youtube .Position }}{{ end -}}
+{{- end -}}
+{{- $providers := slice -}}
+{{- with $apple }}{{ $providers = $providers | append (dict "key" "apple" "label" "apple music" "url" .) }}{{ end -}}
+{{- with $spotify }}{{ $providers = $providers | append (dict "key" "spotify" "label" "spotify" "url" .) }}{{ end -}}
+{{- with $youtube }}{{ $providers = $providers | append (dict "key" "youtube" "label" "youtube" "url" .) }}{{ end -}}
+<figure class="plate plate-music" data-music data-title="{{ $title }}"
+  {{- with $apple }} data-apple="{{ . }}"{{ end }}
+  {{- with $spotify }} data-spotify="{{ . }}"{{ end }}
+  {{- with $youtube }} data-youtube="{{ . }}"{{ end }}>
+  <div class="music-idle">
+    <div class="music-title">{{ $title }}{{ with $subtitle }} <span class="music-sub">· {{ . }}</span>{{ end }}</div>
+    {{ with $work }}<div class="music-work">{{ . }}</div>{{ end }}
+  </div>
+  <div class="music-frame" hidden></div>
+  <figcaption>
+    <span class="plate-caption">{{ $caption }} — <span class="listen-lead">-&gt; listen via</span>
+      {{- range $i, $p := $providers }}
+      <span class="listen-opt">{{ if gt $i 0 }}<span class="listen-sep">·</span> {{ end }}<a class="listen-link" data-provider="{{ $p.key }}" href="{{ $p.url }}">{{ $p.label }}</a></span>
+      {{- end }}</span>
+    <span class="plate-no">ex. {{ $n }}</span>
+  </figcaption>
+</figure>

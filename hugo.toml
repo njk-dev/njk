@@ -3,9 +3,28 @@ locale = 'en-us'
 title = 'njk.'
 
 # No theme — layouts live at project level
-# Two pages: / and /404.html. Nothing else until there is something to say.
+# The rooms: / (fol. 01) · /writing/ (fol. 02, posts fol. 03+) · /404.html (fol. ∅)
 # (sitemap stays on — unlinked, at the default /sitemap.xml)
-disableKinds = ['taxonomy', 'term', 'rss', 'section', 'page']
+disableKinds = ['taxonomy', 'term']
+
+# RSS for the writing section only — the home page has nothing serial to feed
+[outputs]
+  home = ['html']
+  section = ['html', 'rss']
+
+[markup.goldmark.renderer]
+  # own prose, hand-authored: needed for <cite> in pulled quotes and the
+  # one accent span per essay
+  unsafe = true
+
+[markup.goldmark.parser.attribute]
+  # block attributes: {.preface} on the opening paragraph
+  block = true
+
+[markup.goldmark.extensions.typographer]
+  # the designs render straight quotes throughout — a typed page, not a
+  # typeset one; no silent curly-quote substitution
+  disable = true
 
 [params]
   description = 'credo ut intelligam.'

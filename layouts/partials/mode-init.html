@@ -1,0 +1,16 @@
+<!-- Mode: dark is default; light via [data-mode="light"], OS-driven with a manual override.
+     Runs before paint — no flash of the wrong mode, and theme-color follows so the
+     browser chrome doesn't arrive dark on a light page. Include AFTER head-common
+     (the theme-color meta must already exist). -->
+<script>
+  (function () {
+    var m = null;
+    try { m = localStorage.getItem('mode'); } catch (e) {}
+    if (!m && matchMedia('(prefers-color-scheme: light)').matches) m = 'light';
+    if (m === 'light') {
+      document.documentElement.setAttribute('data-mode', 'light');
+      var tc = document.querySelector('meta[name="theme-color"]');
+      if (tc) tc.content = '#f3f1ea';
+    }
+  })();
+</script>

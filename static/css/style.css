@@ -29,6 +29,14 @@
   font-display: swap;
   src: url("/fonts/IBMPlexMono-SemiBold.woff2") format("woff2");
 }
+@font-face {
+  /* the writing room speaks in italics (prefaces, pulled quotes, cited titles) */
+  font-family: "IBM Plex Mono";
+  font-style: italic;
+  font-weight: 400;
+  font-display: swap;
+  src: url("/fonts/IBMPlexMono-Italic.woff2") format("woff2");
+}
 
 /* ============================================================
    njk. — design tokens (PINNED · 13 July 2026)
@@ -71,6 +79,12 @@
   --ink-colophon: #4f4d47;
   --hairline: #343330;
 
+  /* ---- the writing room (post template) --------------------- */
+  --fs-title: 2rem;          /* post title · weight 300 · lh 1.4 — the only large type */
+  --ink-soft: #b5b1a8;       /* preface italics, pulled quotes */
+  --ink-dim: #443f38;        /* dateline separator dot */
+  --plate: #1d1d1a;          /* recessed media ground (plates) */
+
   /* ---- the six tempers (accent + word, inseparable) --------- */
   --t-gold: #e8c14e;     /* dwell     · the hearth · daily driver */
   --t-orange: #fd9353;   /* spark     · the forge */
@@ -110,6 +124,9 @@
   --ink-faint: #b9b4a6;
   --ink-colophon: #b9b4a6;
   --hairline: #e3dfd3;
+  --ink-soft: #57544a;
+  --ink-dim: #d5d0c2;
+  --plate: #eae7dd;
 
   --t-gold: #b98f1c;     /* dwell     */
   --t-orange: #e0761c;   /* spark     */
@@ -117,7 +134,8 @@
   --t-violet: #6d5ad6;   /* reading   */
   --t-green: #2ba459;    /* project   */
   --t-gray: #8a8578;     /* log       */
-  /* prism hovers follow: n gold · j teal · k green (light values) */
+  /* prism hovers follow the creed's order: n gold · j orange · k green
+     (owner's revision, july 2026 — light values likewise) */
 }
 
 /* ============================================================
@@ -196,9 +214,8 @@ body {
   color: var(--ink-display);
 }
 
-/* prism: n gold · j orange · k green — owner's revision (July 2026),
-   matching the creed order (creed · choice · habit); supersedes the
-   token comment's "n gold · j teal · k green" */
+/* prism: n gold · j orange · k green — canon, matching the creed order
+   (creed · choice · habit); pinned in tokens.css and Brand Book §02 */
 .wm { transition: color 0.45s ease; }
 .wm-n:hover { color: var(--t-gold); transition-duration: 0.1s; }
 .wm-j:hover { color: var(--t-orange); transition-duration: 0.1s; }
@@ -310,12 +327,10 @@ body {
 /* only paint the tint where masking can shape it — never a bare rectangle */
 @supports ((mask: url("")) or (-webkit-mask: url(""))) {
   .mark { background-color: var(--acc); }
+  .mark-ghost { background-color: var(--t-gray); }
 }
 
-.mark-ghost {
-  background-color: var(--t-gray);
-  opacity: 0.35;
-}
+.mark-ghost { opacity: 0.35; }
 
 .colophon {
   display: flex;
@@ -332,6 +347,13 @@ body {
 
 .day-name { color: var(--acc); }
 .word-gray { color: var(--t-gray); }
+.word-violet { color: var(--t-violet); }
+
+.colophon-note {
+  font-size: var(--fs-colophon);
+  letter-spacing: var(--ls-colophon);
+  color: var(--ink-colophon);
+}
 
 /* the moon/sun phrase — the manual mode override, inline in the day line */
 .mode-toggle {
@@ -347,6 +369,379 @@ body {
 }
 
 .mode-toggle:hover { color: var(--ink-muted); }
+
+/* ============================================================
+   THE WRITING ROOM — /writing/ wears violet · reading, always;
+   the essay belongs to the reader. Semantic, not rolled: no roll
+   script on typed pages. Law: Brand Book §§10–11.
+   Reference: njk Post.dc.html.
+   ============================================================ */
+
+/* the page's temper is violet — the accent-driven furniture
+   (breadcrumb leaf, mark, hovers, focus rings) follows */
+.page-writing { --acc: var(--t-violet); }
+
+.page-writing .running-head { margin-bottom: 72px; }
+
+.breadcrumb a {
+  color: inherit;
+  text-decoration: none;
+}
+
+/* scoped under .breadcrumb so the leaf stays violet even if it ever
+   becomes an anchor (outranks .breadcrumb a's inherit) */
+.breadcrumb .crumb-writing { color: var(--t-violet); }
+
+.kicker {
+  font-size: var(--fs-label);
+  font-weight: var(--fw-label);
+  letter-spacing: var(--ls-label);
+  text-transform: uppercase;
+  color: var(--t-violet);
+}
+
+.post-title {
+  margin: 18px 0 0;
+  font-size: var(--fs-title);
+  font-weight: 300;
+  letter-spacing: -0.01em;
+  line-height: 1.4;
+  color: var(--ink-display);
+}
+
+.dateline {
+  margin-top: 16px;
+  font-size: 0.75rem;
+  letter-spacing: 0.1em;
+  color: var(--ink-faint);
+}
+
+.dateline-dim { color: var(--ink-dim); }
+
+.stub {
+  width: 44px;
+  height: 1px;
+  background: var(--hairline);
+  margin-top: 44px;
+}
+
+/* ---- prose: hierarchy by rhythm, not scale ------------------- */
+.prose {
+  margin-top: 44px;
+  font-size: var(--fs-body);
+  line-height: var(--lh-body);
+  color: var(--ink-body);
+}
+
+.prose > * { margin: 28px 0 0; }
+.prose > :first-child { margin-top: 0; }
+
+.prose a {
+  color: inherit;
+  text-decoration: underline;
+  text-decoration-color: var(--t-violet);
+  text-underline-offset: 4px;
+  transition: color 0.15s ease;
+}
+
+.prose a:hover { color: var(--t-violet); }
+
+/* ## section markers — label style in violet; the ## ships as content */
+.prose h2 {
+  font-size: var(--fs-label);
+  font-weight: var(--fw-label);
+  letter-spacing: var(--ls-label);
+  text-transform: uppercase;
+  color: var(--t-violet);
+}
+
+.prose h2::before { content: "## "; }
+.prose h2 + * { margin-top: 10px; }
+
+/* the preface ({.preface} on the opening paragraph) */
+.prose .preface {
+  font-style: italic;
+  color: var(--ink-soft);
+}
+
+/* at most one accent-colored sentence per essay — one */
+.prose .accent { color: var(--t-violet); }
+
+/* the pulled quote: the page's one vertical rule */
+.prose blockquote {
+  padding-left: 24px;
+  border-left: 2px solid var(--t-violet);
+  font-style: italic;
+  color: var(--ink-soft);
+}
+
+.prose blockquote p { margin: 0; }
+
+.prose blockquote cite {
+  font-style: normal;
+  color: var(--ink-faint);
+}
+
+/* ---- plates: recessed ground, hairline frame -------------------
+   numbering by role, each its own roman count: images pl. · music ex.
+   · video fig. overflow is the guard — a broken embed can only fail
+   inside its box */
+.plate {
+  background: var(--plate);
+  border: 1px solid var(--hairline);
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  overflow: hidden;
+}
+
+.plate img {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+.plate figcaption {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 16px;
+}
+
+.plate-caption {
+  font-size: 0.6875rem;
+  letter-spacing: 0.1em;
+  color: var(--ink-muted);
+}
+
+.plate-no {
+  font-size: 0.625rem;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--ink-faint);
+  flex-shrink: 0;
+}
+
+/* ---- ex. — musical examples: one plate, the listener chooses the
+   door. resting = title + work, no iframe before a click ---------- */
+.music-idle {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.plate-music.is-playing .music-idle { display: none; }
+
+.music-title {
+  font-size: 0.875rem;
+  line-height: 1.6;
+  color: var(--ink-body);
+}
+
+.music-sub { color: var(--ink-faint); }
+
+.music-work {
+  font-size: 0.75rem;
+  letter-spacing: 0.05em;
+  color: var(--ink-muted);
+}
+
+.music-frame iframe {
+  display: block;
+  width: 100%;
+  max-width: 100%;
+  overflow: hidden;
+}
+
+/* the caption is the control surface; 1.8 so a wrapped row breathes,
+   and each `· provider` pair wraps as one word — no orphaned dots */
+.plate-music .plate-caption { line-height: 1.8; }
+
+.listen-lead,
+.listen-sep { color: var(--ink-faint); }
+
+.listen-opt { white-space: nowrap; }
+
+/* the source words: underlined hairline at rest, temper on hover;
+   the reader's usual door wears the temper (providers never do) */
+.plate-music .listen-link {
+  color: inherit;
+  text-decoration: underline;
+  text-decoration-color: var(--hairline);
+  text-underline-offset: 3px;
+  transition: color 0.15s ease;
+}
+
+.plate-music .listen-link:hover { color: var(--acc); }
+.plate-music .listen-link.is-usual { color: var(--acc); }
+
+/* ---- fig. — video that IS the content: 16:9, youtube-nocookie -- */
+.plate-video iframe {
+  display: block;
+  width: 100%;
+  max-width: 100%;
+  aspect-ratio: 16 / 9;
+  border: 0;
+  border-radius: 10px;
+  background: #000;
+  overflow: hidden;
+}
+
+/* ---- footnotes: the log of the text, not the text -------------- */
+/* markers in prose: bare superscript numerals, violet 600, no brackets */
+.prose sup { line-height: 0; }
+
+.prose .footnote-ref {
+  padding-left: 2px;
+  font-size: 0.6875rem;
+  font-weight: 600;
+  color: var(--t-violet);
+  text-decoration: none;
+}
+
+/* :: notes — goldmark's .footnotes section, restyled */
+.prose .footnotes {
+  margin-top: 56px;
+  padding-top: 28px;
+  border-top: 1px solid var(--hairline);
+}
+
+.prose .footnotes hr { display: none; }
+
+.prose .footnotes::before {
+  content: ":: notes";
+  content: ":: notes" / "notes"; /* alt text: read as "notes", not ":: notes" */
+  display: block;
+  font-size: var(--fs-label);
+  font-weight: var(--fw-label);
+  letter-spacing: var(--ls-label);
+  text-transform: uppercase;
+  color: var(--ink-muted);
+}
+
+.prose .footnotes ol {
+  margin: 14px 0 0;
+  padding: 0;
+  list-style: none;
+  counter-reset: note;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  font-size: 0.8125rem;
+  line-height: 1.9;
+  color: var(--ink-muted);
+}
+
+/* number in an auto-width column, 14px off the text — per the design;
+   grid (not flex) so a multi-paragraph note stays in the text column */
+.prose .footnotes li {
+  counter-increment: note;
+  display: grid;
+  grid-template-columns: max-content 1fr;
+  column-gap: 14px;
+}
+
+.prose .footnotes li::before {
+  content: counter(note);
+  grid-row: 1;
+  color: var(--t-violet);
+  font-weight: 600;
+}
+
+.prose .footnotes li > * { grid-column: 2; }
+
+.prose .footnotes p { margin: 0; }
+
+/* back-links: <- in faint, hover violet (the ↩ glyph is replaced) */
+.prose .footnotes .footnote-backref {
+  font-size: 0;
+  text-decoration: none;
+  color: var(--ink-faint);
+}
+
+.prose .footnotes .footnote-backref::after {
+  content: "<-";
+  content: "<-" / ""; /* decorative — the link's name comes from its aria-label */
+  font-size: 0.8125rem;
+  transition: color 0.15s ease;
+}
+
+.prose .footnotes .footnote-backref:hover::after { color: var(--t-violet); }
+
+/* ---- :: further (listed posts only) ---------------------------- */
+.further {
+  margin-top: 56px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.further-label {
+  font-size: var(--fs-label);
+  font-weight: var(--fw-label);
+  letter-spacing: var(--ls-label);
+  text-transform: uppercase;
+  color: var(--ink-muted);
+}
+
+.further a {
+  font-size: var(--fs-link);
+  letter-spacing: var(--ls-link);
+  color: var(--ink-muted);
+  text-decoration: none;
+  transition: color 0.15s ease;
+}
+
+.further a:hover { color: var(--t-violet); }
+
+/* unlisted closing line — in the volume, not in the count */
+.closing-line {
+  margin-top: 56px;
+  font-size: 0.75rem;
+  letter-spacing: 0.1em;
+  color: var(--ink-faint);
+}
+
+/* ---- the writing index (/writing/ · fol. 02) ------------------- */
+.writing-index {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.writing-label {
+  margin: 0 0 -2px;
+  font-size: var(--fs-label);
+  font-weight: var(--fw-label);
+  letter-spacing: var(--ls-label);
+  text-transform: uppercase;
+  color: var(--t-violet);
+}
+
+.writing-index .entry {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 16px;
+}
+
+.writing-index .entry a {
+  font-size: var(--fs-link);
+  letter-spacing: var(--ls-link);
+  color: var(--ink-muted);
+  text-decoration: none;
+  transition: color 0.15s ease;
+}
+
+.writing-index .entry a:hover { color: var(--t-violet); }
+
+.entry-date {
+  font-size: 0.6875rem;
+  letter-spacing: 0.1em;
+  color: var(--ink-faint);
+  flex-shrink: 0;
+}
 
 /* ---- focus ----------------------------------------------------- */
 a:focus-visible,

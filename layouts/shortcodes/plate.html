@@ -1,0 +1,17 @@
+{{- /* a plate: recessed ground, hairline frame, caption left, number right.
+     usage: plate src="..." caption="..." n="i" alt="..."
+     Numbers are roman, per essay, assigned by hand. Every plate has a caption —
+     no image without a word, no word without an image. */ -}}
+{{- $src := .Get "src" -}}
+{{- $caption := .Get "caption" -}}
+{{- $n := .Get "n" -}}
+{{- if not $src }}{{ errorf "plate: no image without a word — src is required (%s)" .Position }}{{ end -}}
+{{- if not $caption }}{{ errorf "plate: no image without a word — caption is required (%s)" .Position }}{{ end -}}
+{{- if not $n }}{{ errorf "plate: plates number per essay in roman — n is required (%s)" .Position }}{{ end -}}
+<figure class="plate">
+  <img src="{{ $src }}" alt="{{ .Get "alt" | default $caption }}" loading="lazy">
+  <figcaption>
+    <span class="plate-caption">{{ $caption }}</span>
+    <span class="plate-no">pl. {{ $n }}</span>
+  </figcaption>
+</figure>

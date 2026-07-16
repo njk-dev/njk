@@ -1,0 +1,23 @@
+{{- /* video that IS the content — fig. {n}, its own roman count (numbering by
+     role: images pl. · music ex. · video fig.). 16:9, youtube-nocookie,
+     sizes authored on our side.
+     usage: video youtube="url or id" title="..." caption="..." n="i" */ -}}
+{{- $yt := .Get "youtube" -}}
+{{- $title := .Get "title" -}}
+{{- $caption := .Get "caption" -}}
+{{- $n := .Get "n" -}}
+{{- if not $yt }}{{ errorf "video: youtube (url or id) is required (%s)" .Position }}{{ end -}}
+{{- if not $title }}{{ errorf "video: title is required — it names the frame for screen readers (%s)" .Position }}{{ end -}}
+{{- if not $caption }}{{ errorf "video: no plate without a word — caption is required (%s)" .Position }}{{ end -}}
+{{- if not $n }}{{ errorf "video: figures number per essay in roman — n is required (%s)" .Position }}{{ end -}}
+{{- $id := replaceRE `^.*(?:youtu\.be/|[?&]v=|/embed/|/shorts/|/live/)([A-Za-z0-9_-]+).*$` "$1" $yt -}}
+{{- if not (findRE `^[A-Za-z0-9_-]{6,}$` $id) }}{{ errorf "video: could not read a youtube id from %q (%s)" $yt .Position }}{{ end -}}
+<figure class="plate plate-video">
+  <iframe src="https://www.youtube-nocookie.com/embed/{{ $id }}" title="{{ $title }}" loading="lazy"
+    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+    allowfullscreen frameborder="0"></iframe>
+  <figcaption>
+    <span class="plate-caption">{{ $caption }}</span>
+    <span class="plate-no">fig. {{ $n }}</span>
+  </figcaption>
+</figure>

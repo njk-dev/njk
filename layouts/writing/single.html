@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{{ .Title }} · {{ .Site.Title }}</title>
+  {{- $desc := .Description | default (.Summary | plainify | replaceRE `\s+` " " | strings.TrimSpace | truncate 160) | default .Site.Params.description }}
+  <meta name="description" content="{{ $desc }}">
+  <meta name="author" content="{{ .Site.Params.author }}">
+  {{ if .Params.unlisted -}}
+  <meta name="robots" content="noindex">
+  {{- else -}}
+  <link rel="canonical" href="{{ .Permalink }}">
+  {{- end }}
+  {{ with .CurrentSection.OutputFormats.Get "rss" -}}
+  <link rel="alternate" type="application/rss+xml" title="writing · {{ $.Site.Title }}" href="{{ .Permalink }}">
+  {{- end }}
+
+  <!-- Open Graph -->
+  <meta property="og:title" content="{{ .Title }}">
+  <meta property="og:description" content="{{ $desc }}">
+  <meta property="og:type" content="article">
+  <meta property="og:url" content="{{ .Permalink }}">
+  <meta property="og:image" content="{{ .Site.BaseURL }}og-image.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+
+  <!-- Twitter Card -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="{{ .Title }}">
+  <meta name="twitter:description" content="{{ $desc }}">
+  <meta name="twitter:image" content="{{ .Site.BaseURL }}og-image.png">
+
+  {{ partial "head-common.html" . }}
+  {{ partial "mode-init.html" . }}
+  <link rel="preload" href="/fonts/IBMPlexMono-Italic.woff2" as="font" type="font/woff2" crossorigin>
+</head>
+<body>
+  <div class="spine"></div>
+  <main class="page page-writing">
+    <header class="running-head">
+      {{- /* the leaf is a span, not a link, per the design — "-> all writing"
+           is the way back on listed posts; unlisted leaves point nowhere */}}
+      <div class="breadcrumb"><a href="/">njk.dev</a> <span class="crumb-sep">/</span> <span class="crumb-writing">writing</span></div>
+      {{- /* the ledger is strict: listed posts carry a hand-assigned arabic
+           folio (fol. 03+); anything else is a build error, not a guess */}}
+      <div class="folio">
+        {{- if .Params.unlisted -}}
+          unpaginated
+        {{- else -}}
+          {{- with .Params.folio -}}
+            {{- if findRE `^\d+$` (printf "%v" .) -}}
+              fol. {{ printf "%02d" (int .) }}
+            {{- else -}}
+              {{- errorf "writing: folio must be a number — the ledger is arabic, zero-padded (got %q in %s)" . $.File.Path -}}
+            {{- end -}}
+          {{- else -}}
+            {{- errorf "writing: a listed post carries a folio — assign the next number in the ledger (%s)" $.File.Path -}}
+          {{- end -}}
+        {{- end -}}
+      </div>
+    </header>
+
+    <div class="kicker">:: {{ .Params.genre | default "essay" }} · {{ if .Params.unlisted }}unlisted{{ else }}{{ .ReadingTime }} min{{ end }}</div>
+    <h1 class="post-title">{{ .Title }}</h1>
+    {{- /* the dateline: dd · roman-month · yyyy · {occasion or nothing} */}}
+    {{ if .Date.IsZero }}{{ warnf "writing: %s has no date — the dateline will read 01 · i · 0001" .File.Path }}{{ end }}
+    {{ $roman := index (slice "i" "ii" "iii" "iv" "v" "vi" "vii" "viii" "ix" "x" "xi" "xii") (sub (int .Date.Month) 1) }}
+    <div class="dateline">{{ .Date.Format "02" }} · {{ $roman }} · {{ .Date.Format "2006" }}{{ with .Params.occasion }} <span class="dateline-dim">·</span> {{ . }}{{ end }}</div>
+
+    <div class="stub"></div>
+
+    <article class="prose">
+      {{ .Content }}
+    </article>
+
+    {{ if .Params.unlisted }}
+    <div class="closing-line">shared by hand · no index points here</div>
+    {{ else }}
+    <nav class="further">
+      <div class="further-label">:: further</div>
+      {{- /* Hugo's Prev/Next walk the date-descending collection: Prev = older */}}
+      {{ with .PrevInSection }}
+      <a href="{{ .RelPermalink }}"><span class="arrow">&lt;-</span> previous: {{ .Title }}</a>
+      {{ end }}
+      <a href="/writing/"><span class="arrow">-&gt;</span> all writing</a>
+    </nav>
+    {{ end }}
+
+    <footer class="footer">
+      <div class="footer-inner">
+        <div class="mark" title="he read it first"></div>
+        <div class="colophon">
+          {{ partial "day-line.html" (dict "after" `, violet · <span class="word-violet">reading</span> — writing is read here`) }}
+          {{/* held until the berkeley mono web license lands (brief §6):
+          <div class="colophon-note">set in berkeley mono · handmade</div> */}}
+        </div>
+      </div>
+    </footer>
+  </main>
+
+  {{ if .HasShortcode "music" }}{{ partial "music-player.html" . }}{{ end }}
+  <script>
+    (function () {
+      var violet = getComputedStyle(document.documentElement).getPropertyValue('--t-violet').trim();
+      console.log('%cyou read the source too? credo ut intelligam indeed.',
+        'color:' + violet + ';font-family:monospace;');
+
+      // the <- back-links ship goldmark's ↩ glyph under the styling — give
+      // screen readers a real name instead of "leftwards arrow with hook"
+      var refs = document.querySelectorAll('.footnote-backref');
+      for (var i = 0; i < refs.length; i++) {
+        refs[i].setAttribute('aria-label', 'back to reference ' + (i + 1));
+      }
+    })();
+  </script>
+</body>
+</html>

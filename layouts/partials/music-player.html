@@ -1,0 +1,91 @@
+<!-- The listener chooses the door. Nothing loads before a click; the chosen
+     provider is kept (localStorage njk-listen) and wears the temper on later
+     plates — it never auto-loads. Included only when the page has a music
+     shortcode. No JS: the source words are plain links to the provider pages. -->
+<script>
+  (function () {
+    var KEY = 'njk-listen';
+    var plates = document.querySelectorAll('[data-music]');
+    if (!plates.length) return;
+
+    function usual() {
+      try { return localStorage.getItem(KEY); } catch (e) { return null; }
+    }
+
+    // the usual door wears the temper (color only — it does NOT auto-load)
+    function paintUsual() {
+      var u = usual();
+      for (var i = 0; i < plates.length; i++) {
+        var links = plates[i].querySelectorAll('.listen-link');
+        for (var j = 0; j < links.length; j++) {
+          links[j].classList[links[j].getAttribute('data-provider') === u ? 'add' : 'remove']('is-usual');
+        }
+      }
+    }
+
+    // embed derivations — heights/aspect authored on our side, never provider-driven
+    function build(provider, url, title) {
+      var light = document.documentElement.getAttribute('data-mode') === 'light';
+      var f = document.createElement('iframe');
+      f.style.display = 'block';
+      f.style.width = '100%';
+      f.style.maxWidth = '100%';
+      f.style.overflow = 'hidden';
+      f.style.border = '0';
+      f.setAttribute('frameborder', '0');
+      if (provider === 'apple') {
+        var src = url.replace(/\/\/(geo\.)?music\.apple\.com/, '//embed.music.apple.com');
+        src += (src.indexOf('?') > -1 ? '&' : '?') + 'theme=' + (light ? 'light' : 'dark');
+        f.src = src;
+        f.height = (/[?&]i=/.test(url) || url.indexOf('/song/') > -1) ? '150' : '450';
+        f.style.borderRadius = '10px';
+        f.style.background = 'transparent';
+        f.title = title + ' on Apple Music';
+        f.setAttribute('allow', 'autoplay *; encrypted-media *;');
+        f.setAttribute('sandbox', 'allow-forms allow-popups allow-same-origin allow-scripts allow-storage-access-by-user-activation allow-top-navigation-by-user-activation');
+      } else if (provider === 'spotify') {
+        // browser-copied urls may carry an /intl-xx/ segment; the embed path 404s with it
+        f.src = url.split('?')[0].replace(/\/intl-[^/]+\//, '/').replace('open.spotify.com/', 'open.spotify.com/embed/');
+        f.height = url.indexOf('/track/') > -1 ? '152' : '352';
+        f.style.borderRadius = '12px';
+        f.style.background = 'transparent';
+        f.title = title + ' on Spotify';
+        f.setAttribute('allow', 'autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture');
+        f.setAttribute('loading', 'lazy');
+      } else {
+        var m = url.match(/(?:youtu\.be\/|[?&]v=|\/embed\/|\/shorts\/|\/live\/)([A-Za-z0-9_-]+)/);
+        f.src = 'https://www.youtube-nocookie.com/embed/' + (m ? m[1] : url);
+        f.style.aspectRatio = '16 / 9';
+        f.style.borderRadius = '10px';
+        f.style.background = '#000';
+        f.title = title + ' on YouTube';
+        f.setAttribute('allow', 'accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share');
+        f.setAttribute('allowfullscreen', '');
+      }
+      return f;
+    }
+
+    for (var i = 0; i < plates.length; i++) {
+      (function (plate) {
+        plate.addEventListener('click', function (e) {
+          var link = e.target.closest ? e.target.closest('.listen-link') : null;
+          if (!link || !plate.contains(link)) return;
+          // modified clicks keep their browser meaning (open the provider page in a tab)
+          if (e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) return;
+          e.preventDefault();
+          var p = link.getAttribute('data-provider');
+          var url = plate.getAttribute('data-' + p);
+          if (!url) return;
+          try { localStorage.setItem(KEY, p); } catch (err) {}
+          var slot = plate.querySelector('.music-frame');
+          slot.textContent = '';
+          slot.appendChild(build(p, url, plate.getAttribute('data-title') || ''));
+          slot.hidden = false;
+          plate.classList.add('is-playing');
+          paintUsual();
+        });
+      })(plates[i]);
+    }
+    paintUsual();
+  })();
+</script>

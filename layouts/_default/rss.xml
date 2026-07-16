@@ -1,0 +1,28 @@
+{{- /* the writing feed — replaces hugo's embedded rss.xml, which ships an
+     invalid empty <lastBuildDate/> while the ledger has no listed posts.
+     Only sections output rss (hugo.toml [outputs]). */ -}}
+{{- $pages := .RegularPages -}}
+{{- printf "<?xml version=\"1.0\" encoding=\"utf-8\" standalone=\"yes\"?>" | safeHTML }}
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>{{ .Title }} · {{ .Site.Title }}</title>
+    <link>{{ .Permalink }}</link>
+    <description>{{ .Site.Params.description }}</description>
+    <language>{{ .Site.Language.Locale | default "en-us" }}</language>
+    {{- with $pages }}{{ with index .ByDate.Reverse 0 }}
+    <lastBuildDate>{{ .Date.Format "Mon, 02 Jan 2006 15:04:05 -0700" | safeHTML }}</lastBuildDate>
+    {{- end }}{{ end }}
+    {{- with .OutputFormats.Get "rss" }}
+    <atom:link href="{{ .Permalink }}" rel="self" type="application/rss+xml" />
+    {{- end }}
+    {{- range $pages }}
+    <item>
+      <title>{{ .Title }}</title>
+      <link>{{ .Permalink }}</link>
+      <pubDate>{{ .Date.Format "Mon, 02 Jan 2006 15:04:05 -0700" | safeHTML }}</pubDate>
+      <guid>{{ .Permalink }}</guid>
+      <description>{{ .Description | default (.Summary | plainify) | transform.XMLEscape }}</description>
+    </item>
+    {{- end }}
+  </channel>
+</rss>

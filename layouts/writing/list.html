@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>writing · {{ .Site.Title }}</title>
+  <meta name="description" content="{{ .Description | default .Site.Params.description }}">
+  <meta name="author" content="{{ .Site.Params.author }}">
+  <link rel="canonical" href="{{ .Permalink }}">
+  {{ with .OutputFormats.Get "rss" -}}
+  <link rel="alternate" type="application/rss+xml" title="writing · {{ $.Site.Title }}" href="{{ .Permalink }}">
+  {{- end }}
+
+  <!-- Open Graph -->
+  <meta property="og:title" content="writing · {{ .Site.Title }}">
+  <meta property="og:description" content="{{ .Description | default .Site.Params.description }}">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="{{ .Permalink }}">
+  <meta property="og:image" content="{{ .Site.BaseURL }}og-image.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+
+  <!-- Twitter Card -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="writing · {{ .Site.Title }}">
+  <meta name="twitter:description" content="{{ .Description | default .Site.Params.description }}">
+  <meta name="twitter:image" content="{{ .Site.BaseURL }}og-image.png">
+
+  {{ partial "head-common.html" . }}
+  {{ partial "mode-init.html" . }}
+</head>
+<body>
+  <div class="spine"></div>
+  <main class="page page-writing">
+    <header class="running-head">
+      <div class="breadcrumb"><a href="/">njk.dev</a> <span class="crumb-sep">/</span> <span class="crumb-writing">writing</span></div>
+      <div class="folio">fol. 02</div>
+    </header>
+
+    <section class="writing-index">
+      <h1 class="writing-label">:: writing</h1>
+      {{- /* the ledger: listed posts only — unlisted leaves carry _build.list: never */}}
+      {{ range .RegularPages }}
+      {{ $roman := index (slice "i" "ii" "iii" "iv" "v" "vi" "vii" "viii" "ix" "x" "xi" "xii") (sub (int .Date.Month) 1) }}
+      <div class="entry">
+        <a href="{{ .RelPermalink }}"><span class="arrow">-&gt;</span> {{ .Title }}</a>
+        <span class="entry-date">{{ .Date.Format "02" }} · {{ $roman }} · {{ .Date.Format "2006" }}</span>
+      </div>
+      {{ end }}
+    </section>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        <div class="mark" title="he read it first"></div>
+        <div class="colophon">
+          {{ partial "day-line.html" (dict "after" `, violet · <span class="word-violet">reading</span> — writing is read here`) }}
+          {{/* held until the berkeley mono web license lands (brief §6):
+          <div class="colophon-note">set in berkeley mono · handmade</div> */}}
+        </div>
+      </div>
+    </footer>
+  </main>
+
+  <script>
+    (function () {
+      var violet = getComputedStyle(document.documentElement).getPropertyValue('--t-violet').trim();
+      console.log('%cyou read the source too? credo ut intelligam indeed.',
+        'color:' + violet + ';font-family:monospace;');
+    })();
+  </script>
+</body>
+</html>
