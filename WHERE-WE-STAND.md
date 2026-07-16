@@ -166,17 +166,17 @@ not real citations; only the Apple *Te lucis* URL is real.)
    (the stack in `--font-mono` already degrades correctly — do not
    restructure), then un-comment those three lines. The `.colophon-note` CSS
    already exists and waits.
-2. **The first essay is a DRAFT.** `content/writing/the-hermit-who-would-not-
-   stay-hidden.md` — `draft: true`, future-dated 2026-07-22 (the feast),
-   unlisted. Ported verbatim from the post design. Before publishing: verify
-   the vatican.va URL in footnote 2 (design had `#`; the URL was supplied from
-   knowledge, not checked against the live site), drop the plate image at
-   `static/plates/annaya-hermitage.jpg` and add the staged plate shortcode
-   (it's in the post's FRONT MATTER comments, deliberately not in the body —
-   an HTML comment in the body would ship the TODO in the published page's
-   view-source), then remove `draft: true`. It stays unlisted + unpaginated
-   unless the owner says otherwise; if ever listed, remove both unlisted flags
-   and assign the next folio by hand.
+2. **The first essay is LIVE (unlisted).** `content/writing/the-hermit-who-
+   would-not-stay-hidden.md` — published 15 july 2026 via `publishDate`
+   (the `date` stays 2026-07-22, the feast, for the dateline; that split is
+   how a future-dated leaf builds without `buildFuture`). Unlisted: reachable
+   only by its URL (`/writing/the-hermit-who-would-not-stay-hidden/`), out of
+   index/RSS/sitemap, `noindex`, `unpaginated`. The vatican.va URL in footnote
+   2 was verified live (HTTP 200, 15 july 2026). STILL PENDING: the plate
+   image — drop it at `static/plates/annaya-hermitage.jpg` and add the staged
+   shortcode from the post's FRONT MATTER comments (deliberately not an HTML
+   comment in the body, which would ship the TODO in view-source). If ever
+   listed, remove both unlisted flags and assign the next folio by hand.
 3. **Front matter key is `genre`, not `type`** — `type` is reserved by Hugo
    (it changes layout lookup). The brief's kicker `:: {type}` reads from
    `.Params.genre`, default `essay`.
@@ -243,10 +243,11 @@ Reviewed and deliberately NOT taken (don't re-litigate without the owner):
 ## verifying changes
 
 ```
-hugo -D -F --destination /tmp/njk-build --cleanDestinationDir
+hugo --destination /tmp/njk-build --cleanDestinationDir
 ```
 
-(`-D -F` because the sample post is a future-dated draft.) Check: the post
+(The first essay publishes via `publishDate`, so a plain build includes it;
+use `-D -F` only when working on new drafts.) Check: the post
 page's folio/kicker/notes markup, `/writing/index.html` ledger, and that the
 unlisted post appears NOWHERE in `sitemap.xml` or `writing/index.xml`. A plain
 `hugo` build must stay clean and must NOT emit the draft. `hugo server -D` to

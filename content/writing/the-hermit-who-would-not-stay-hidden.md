@@ -1,7 +1,7 @@
 ---
 title: The Hermit Who Would Not Stay Hidden
-date: 2026-07-22
-draft: true # remove when ready — content ported from the design handoff for review
+date: 2026-07-22 # the feast — this is the dateline
+publishDate: 2026-07-15 # shared ahead of the feast; lets hugo build a future-dated leaf
 genre: reflection
 occasion: the feast of st. charbel makhlouf
 # unlisted — in the volume, not in the count. if later published:
