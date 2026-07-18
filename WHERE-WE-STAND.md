@@ -152,9 +152,46 @@ not real citations; only the Apple *Te lucis* URL is real.)
 - CSS: `.plate` grew `overflow: hidden` (the guard); `.plate-music` /
   `.plate-video` sections at the end of the writing room. `.listen-link`
   rules are scoped `.plate-music .listen-link` so they outrank `.prose a`.
-- The draft essay carries `ex. i` (*Te lucis ante terminum*, apple only —
-  the one real URL) before the closing prayer, where the v3 post design
-  places it.
+- The placeholder essay carried `ex. i` (*Te lucis ante terminum*, apple
+  only — the one real URL) as the live demo; it left with the placeholder
+  (deleted 18 july 2026). No current essay ships a music plate — the
+  chooser is dormant but stays regression-tested.
+
+## v4: the charbel essay & the twin title (18 july 2026)
+
+- The placeholder is gone; the real essay landed:
+  `content/writing/seen-in-secret.md` — "everyone sees it. that's the
+  design." Same publish pattern as the placeholder had: `date` 2026-07-22
+  (the feast — the dateline), `publishDate` 2026-07-18 (a plain build
+  includes it now), unlisted (both flags), shared by hand.
+- **THE TWIN TITLE.** The h1 differs by mode: the dark page reads "nobody
+  sees it. that's the design."; the light page strikes that claim through
+  and answers "everyone sees it. that's the design." Mechanism: optional
+  front matter `titleDark` (plain string) + `titleLight` (may carry `<s>`,
+  shipped via `safeHTML`); `single.html` renders one h1 with two
+  aria-hidden spans (`.title-hidden` / `.title-seen`) and puts the
+  canonical `title` on the h1's `aria-label`. The swap is CSS-only, keyed
+  to `[data-mode="light"]` — NOT `prefers-color-scheme`, which would
+  ignore the manual toggle; dark is the attribute-less default, so the
+  hidden span leads. `@media print` shows the struck version (paper reads
+  in the light). `title` stays the ONE canonical string everywhere
+  outside the rendered h1: tab, og/twitter, feed, screen readers. Posts
+  without `titleDark` render exactly as before.
+- The law of the feature: never announced, never explained — no toggle
+  hint, no tooltip, no footnote about it. A reader who flips the mode
+  finds it alone. (Origin + full testing checklist: the owner's
+  `charbel/title-design-spec.md`, written against a light-default
+  prefers-color-scheme site — adapted here to the `[data-mode]` cascade.)
+- Known, accepted: browser reader modes strip CSS and may show both spans
+  concatenated. The spec's hardening (dark variant via `::before` content)
+  was deliberately NOT taken unless it proves a real problem — it costs
+  find-in-page and copy/paste.
+- Four plates at `static/plates/` (recompressed from the owner's originals
+  in `charbel/`, which stays untracked): `annaya-tomb-leo-xiv.jpg` (pl. i),
+  `hermitage-cell.jpg` (pl. ii), `charbel-portrait.jpg` (pl. iii),
+  `annaya-pilgrimage-road.jpg` (pl. iv).
+- All three footnote URLs verified live 18 july 2026 (two vatican.va; the
+  CNA/NCRegister pilgrimage piece is from 24 july 2024).
 
 ## flags for right now — read before touching
 
@@ -166,17 +203,16 @@ not real citations; only the Apple *Te lucis* URL is real.)
    (the stack in `--font-mono` already degrades correctly — do not
    restructure), then un-comment those three lines. The `.colophon-note` CSS
    already exists and waits.
-2. **The first essay is LIVE (unlisted).** `content/writing/the-hermit-who-
-   would-not-stay-hidden.md` — published 15 july 2026 via `publishDate`
+2. **The first essay is LIVE (unlisted).** `content/writing/seen-in-secret.md`
+   — the charbel essay (see v4), published 18 july 2026 via `publishDate`
    (the `date` stays 2026-07-22, the feast, for the dateline; that split is
    how a future-dated leaf builds without `buildFuture`). Unlisted: reachable
-   only by its URL (`/writing/the-hermit-who-would-not-stay-hidden/`), out of
-   index/RSS/sitemap, `noindex`, `unpaginated`. The vatican.va URL in footnote
-   2 was verified live (HTTP 200, 15 july 2026). STILL PENDING: the plate
-   image — drop it at `static/plates/annaya-hermitage.jpg` and add the staged
-   shortcode from the post's FRONT MATTER comments (deliberately not an HTML
-   comment in the body, which would ship the TODO in view-source). If ever
-   listed, remove both unlisted flags and assign the next folio by hand.
+   only by its URL (`/writing/seen-in-secret/`), out of index/RSS/sitemap,
+   `noindex`, `unpaginated`. It carries the twin title — mind the v4 rules
+   before touching the h1 or metadata. The hermit placeholder
+   (`the-hermit-who-would-not-stay-hidden.md`) was deleted the same day; it
+   lives in git history if ever wanted. If the essay is ever listed, remove
+   both unlisted flags and assign the next folio by hand.
 3. **Front matter key is `genre`, not `type`** — `type` is reserved by Hugo
    (it changes layout lookup). The brief's kicker `:: {type}` reads from
    `.Params.genre`, default `essay`.
