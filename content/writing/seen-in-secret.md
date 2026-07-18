@@ -39,12 +39,12 @@ For twenty-three years as a hermit, Charbel slept a few hours a night and ate on
 
 Charbel gave his soul to God on Christmas Eve of 1898. Immediately after he was laid to rest, a brilliant light rose from the place of his tomb. It appeared first to the poor and the overlooked. It appeared to women who could not read. It appeared finally to the Muslim administrator of the region and his soldiers. The light went before them until it disappeared at the monastery door. Night after night, Christians and Muslims saw the light and made pilgrimage to the tomb. His brother monks were the most doubting; only after they exhumed the body of Father Charbel and found it incorrupt did they begin to believe.[^3]
 
-> God chose what is foolish in the world to shame the wise, God chose what is weak in the world to shame the strong, God chose what is low and despised in the world, even things that are not, to bring to nothing things that are. <cite>1 Corinthians 1:27–28</cite>
+> God chose what is foolish in the world to shame the wise, God chose what is weak in the world to shame the strong, God chose what is low and despised in the world, even things that are not, to bring to nothing things that are. <cite>— 1 Corinthians 1:27–28</cite>
 
 Few ever saw Saint Charbel's face. He lived in solitude and kept his eyes toward the ground, lifting them only before Christ in the Blessed Sacrament.
 
 > In the tender compassion of our God\
-> the dawn from on high shall break upon us, <cite>Luke 1:78</cite>
+> the dawn from on high shall break upon us, <cite>— Luke 1:78</cite>
 
 Rome took longer. Charbel was beatified by Pope Saint Paul VI in the closing days of the Second Vatican Council. While the Church debated its future, Paul VI held up a silent hermit: the Church, he told the Council, also needs men of prayer and hidden virtue, whose poverty, penance, and asceticism liberate the soul in its ascent to God. Twelve years later the same pope canonized him, admitting that modern man can scarcely comprehend so severe a life.[^2]
 
@@ -77,7 +77,7 @@ Not many outside the parish ever knew Helen. She came around the counter anyway.
 The Father saw Charbel. The Father saw Helen. The Father sees us.[^design]
 
 > to shine on those who dwell in darkness and the shadow of death,\
-> and to guide our feet into the way of peace. <cite>Luke 1:79</cite>
+> and to guide our feet into the way of peace. <cite>— Luke 1:79</cite>
 
 I took the name for both of them.
 

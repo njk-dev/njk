@@ -177,9 +177,9 @@ not real citations; only the Apple *Te lucis* URL is real.)
   `.post-title s`/`@media print` block in `style.css`. It lives in git
   history (bc8e119 built it, 3f6c2b2 noted Safari Reader behavior) if
   ever wanted again — don't resurrect without the owner.
-- The pulled-quote `<cite>`s in the rewrite carry no leading em dash
-  (the first draft had "— " inside the cite). Authored that way,
-  consistent across all three quotes — left as written.
+- The pulled-quote `<cite>`s carry a leading "— " inside the cite —
+  that's the citation format. The owner's em-dash rule (18 july 2026):
+  citations get the dash; the actual prose avoids em dashes.
 - Two accent-colored prayer lines close the essay (Latin, then Arabic
   transliteration — one prayer, two tongues). The owner confirmed this
   reading of the "at most one accent sentence" law for this essay; don't
