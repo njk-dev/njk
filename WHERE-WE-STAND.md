@@ -157,50 +157,47 @@ not real citations; only the Apple *Te lucis* URL is real.)
   (deleted 18 july 2026). No current essay ships a music plate — the
   chooser is dormant but stays regression-tested.
 
-## v4: the charbel essay & the twin title (18 july 2026)
+## v4: the charbel essay (18 july 2026)
 
-- The placeholder is gone; the real essay landed:
-  `content/writing/seen-in-secret.md` — "everyone sees it. that's the
-  design." Same publish pattern as the placeholder had: `date` 2026-07-22
-  (the feast — the dateline), `publishDate` 2026-07-18 (a plain build
-  includes it now), unlisted (both flags), shared by hand.
-- **THE TWIN TITLE.** The h1 differs by mode: the dark page reads "nobody
-  sees it. that's the design."; the light page strikes that claim through
-  and answers "everyone sees it. that's the design." Mechanism: optional
-  front matter `titleDark` (plain string) + `titleLight` (may carry `<s>`,
-  shipped via `safeHTML`); `single.html` renders one h1 with two
-  aria-hidden spans (`.title-hidden` / `.title-seen`) and puts the
-  canonical `title` on the h1's `aria-label`. The swap is CSS-only, keyed
-  to `[data-mode="light"]` — NOT `prefers-color-scheme`, which would
-  ignore the manual toggle; dark is the attribute-less default, so the
-  hidden span leads. `@media print` shows the struck version (paper reads
-  in the light). `title` stays the ONE canonical string everywhere
-  outside the rendered h1: tab, og/twitter, feed, screen readers. Posts
-  without `titleDark` render exactly as before.
-- The law of the feature: never announced, never explained — no toggle
-  hint, no tooltip, no footnote about it. A reader who flips the mode
-  finds it alone. (Origin + full testing checklist: the owner's
-  `charbel/title-design-spec.md`, written against a light-default
-  prefers-color-scheme site — adapted here to the `[data-mode]` cascade.)
-- Known, accepted: browser reader modes strip CSS and may show both spans
-  concatenated. The spec's hardening (dark variant via `::before` content)
-  was deliberately NOT taken unless it proves a real problem — it costs
-  find-in-page and copy/paste. Safari Reader tested by the owner
-  (18 july 2026): it honors the computed visibility and shows the single
-  title of whichever mode was active when reader view opened — no
-  doubling, and the twin survives into reader mode. Firefox Reader View
-  remains untested.
+- The placeholder is gone; the real essay landed at
+  `content/writing/seen-in-secret.md` — and was REPLACED later the same
+  day with the owner's rewrite (drafted in `charbel/seen-in-secret.md`,
+  untracked). Title: "seen in secret" — one title, lowercase per the
+  site's typed-page convention (owner confirmed; the draft's title-case
+  heading was formatting, not intent). Same publish pattern throughout:
+  `date` 2026-07-22 (the feast — the dateline), `publishDate` 2026-07-18
+  (a plain build includes it), unlisted (both flags), shared by hand.
+  `description` is the preface line.
+- **THE TWIN TITLE IS GONE.** The first published draft carried a
+  mode-dependent h1 (`titleDark`/`titleLight` front matter; CSS-only swap
+  keyed to `[data-mode="light"]`; print rule showing the struck light
+  variant). With the rewrite the owner chose one title, and the machinery
+  was removed entirely: the `with .Params.titleDark` branch in
+  `layouts/writing/single.html` and the `.title-hidden`/`.title-seen`/
+  `.post-title s`/`@media print` block in `style.css`. It lives in git
+  history (bc8e119 built it, 3f6c2b2 noted Safari Reader behavior) if
+  ever wanted again — don't resurrect without the owner.
+- The pulled-quote `<cite>`s in the rewrite carry no leading em dash
+  (the first draft had "— " inside the cite). Authored that way,
+  consistent across all three quotes — left as written.
+- Two accent-colored prayer lines close the essay (Latin, then Arabic
+  transliteration — one prayer, two tongues). The owner confirmed this
+  reading of the "at most one accent sentence" law for this essay; don't
+  re-litigate.
 - Four plates at `static/plates/` (recompressed from the owner's originals
   in `charbel/`, which stays untracked): `annaya-tomb-leo-xiv.jpg` (pl. i),
-  `hermitage-cell.jpg` (pl. ii), `charbel-portrait.jpg` (pl. iii),
-  `annaya-pilgrimage-road.jpg` (pl. iv).
+  `hermitage-cell.jpg` (pl. ii), `annaya-pilgrimage-road.jpg` (pl. iii),
+  `charbel-portrait.jpg` (pl. iv) — the rewrite reordered the last two;
+  numbering is per-essay, by hand.
 - `plate.html` grew an optional `frame="portrait"` (any other value is a
   build error): the image hangs matted — natural aspect, `max-height`
   420px, centered on the recessed ground — instead of full-bleed width,
-  so tall images don't tower on phones. pl. ii and pl. iii wear it;
+  so tall images don't tower on phones. pl. ii and pl. iv wear it;
   landscape plates are untouched.
-- All three footnote URLs verified live 18 july 2026 (two vatican.va; the
-  CNA/NCRegister pilgrimage piece is from 24 july 2024).
+- All nine footnote URLs verified live 18 july 2026 (three vatican.va,
+  wikipedia, two saintcharbel.net.au, the CNA/NCRegister piece,
+  mtv.com.lb, and charbel.org — that last is plain-http only, its host
+  refuses TLS; keep the `http://` link).
 
 ## flags for right now — read before touching
 
@@ -217,8 +214,8 @@ not real citations; only the Apple *Te lucis* URL is real.)
    (the `date` stays 2026-07-22, the feast, for the dateline; that split is
    how a future-dated leaf builds without `buildFuture`). Unlisted: reachable
    only by its URL (`/writing/seen-in-secret/`), out of index/RSS/sitemap,
-   `noindex`, `unpaginated`. It carries the twin title — mind the v4 rules
-   before touching the h1 or metadata. The hermit placeholder
+   `noindex`, `unpaginated`. The h1 is a single plain title — the
+   twin-title draft was replaced the same day (see v4). The hermit placeholder
    (`the-hermit-who-would-not-stay-hidden.md`) was deleted the same day; it
    lives in git history if ever wanted. If the essay is ever listed, remove
    both unlisted flags and assign the next folio by hand.
