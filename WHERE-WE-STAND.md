@@ -185,7 +185,11 @@ not real citations; only the Apple *Te lucis* URL is real.)
 - Known, accepted: browser reader modes strip CSS and may show both spans
   concatenated. The spec's hardening (dark variant via `::before` content)
   was deliberately NOT taken unless it proves a real problem — it costs
-  find-in-page and copy/paste.
+  find-in-page and copy/paste. Safari Reader tested by the owner
+  (18 july 2026): it honors the computed visibility and shows the single
+  title of whichever mode was active when reader view opened — no
+  doubling, and the twin survives into reader mode. Firefox Reader View
+  remains untested.
 - Four plates at `static/plates/` (recompressed from the owner's originals
   in `charbel/`, which stays untracked): `annaya-tomb-leo-xiv.jpg` (pl. i),
   `hermitage-cell.jpg` (pl. ii), `charbel-portrait.jpg` (pl. iii),
