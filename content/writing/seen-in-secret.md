@@ -3,7 +3,7 @@ title: "seen in secret"
 date: 2026-07-22 # the feast — this is the dateline
 publishDate: 2026-07-18 # shared ahead of the feast; lets hugo build a future-dated leaf
 genre: reflection
-occasion: the feast of saint charbel makhlouf
+occasion: in the week of the feast of saint charbel makhlouf
 description: "on monks, mountains, and milk cartons, in the week of the feast of Saint Charbel Makhlouf."
 # unlisted — in the volume, not in the count. if later published:
 # remove both flags and assign the next folio.
