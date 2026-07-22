@@ -229,9 +229,11 @@ never/always.
   the pinned token block, with a comment — a future re-sync of the
   handoff `tokens.css` into the pinned block won't drop it. It is a local
   addition, not a handoff token.
-- **Reconcile later (owner):** the "don'ts" list still reads "No second
-  typeface," and the Brand Book is the law of record. Code and law
-  currently disagree by intent; the owner will square them.
+- **Reconciled (22 july 2026):** the "No second typeface" don't was
+  dropped, and CLAUDE.md now frames the Brand Book / guidelines as the
+  starting railings a Claude works from, not a veto — njk has the final
+  say. The external Brand Book stays the law of record and is the owner's
+  to update when he chooses.
 - Verified against a plain `hugo` build: clean, essay includes, serif
   scoped to prose, chrome mono, non-writing pages and the unlisted
   invariants (sitemap/RSS absence) unchanged.
@@ -263,9 +265,9 @@ never/always.
    `content/_index.md` updated.
 5. `public/` is gitignored — deploys build fresh; don't commit build output.
 
-## don'ts (decided; Brand Book is law)
+## don'ts (the default railings — see CLAUDE.md; njk has final say)
 
-No second typeface. No boxes/cards/rounded containers. No multicolor wordmark
+No boxes/cards/rounded containers. No multicolor wordmark
 at rest. No announcing easter eggs. No Ubuntu orange `#E95420`. No animation
 beyond the prism transitions. No analytics. At most ONE accent-colored
 sentence per essay. Every plate has a caption. Meaning never moves between
