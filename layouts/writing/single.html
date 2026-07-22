@@ -34,6 +34,10 @@
   {{ partial "head-common.html" . }}
   {{ partial "mode-init.html" . }}
   <link rel="preload" href="/fonts/IBMPlexMono-Italic.woff2" as="font" type="font/woff2" crossorigin>
+  {{- /* serif tier: the article body reads in IBM Plex Serif (title 300, body 400, preface/quotes italic) */}}
+  <link rel="preload" href="/fonts/IBMPlexSerif-Light.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="/fonts/IBMPlexSerif-Regular.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="/fonts/IBMPlexSerif-Italic.woff2" as="font" type="font/woff2" crossorigin>
 </head>
 <body>
   <div class="spine"></div>

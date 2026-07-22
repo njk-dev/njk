@@ -199,6 +199,43 @@ not real citations; only the Apple *Te lucis* URL is real.)
   mtv.com.lb, and charbel.org — that last is plain-http only, its host
   refuses TLS; keep the `http://` link).
 
+## v5: the article body goes serif (22 july 2026)
+
+A note on what changed today, not a new law — the owner is reconciling
+the Brand Book / "don'ts" over time; nothing here is decided as
+never/always.
+
+- **What:** the running article body now reads in **IBM Plex Serif**;
+  the chrome stays IBM Plex Mono. Applied on the writing single template
+  only — home, the writing index, and 404 are untouched (they carry no
+  `.prose`/`.post-title` and don't preload the serif).
+- **Serif, by decision:** body paragraphs + lists (Serif 400); the
+  `.post-title` h1 (Serif 300, its existing weight); the `.preface`
+  standfirst and pulled-quote `blockquote`s (they were already italic,
+  so they inherit serif and resolve to **serif-italic**); the `.accent`
+  prayer lines (content, inherit serif-italic).
+- **Mono, held (apparatus):** the dateline, kicker, breadcrumb, folio,
+  footer/colophon (all outside `.prose`, untouched automatically); and
+  re-asserted inside `.prose` so serif can't reach them — `## ` section
+  markers (`.prose h2`), the `:: notes` block and inline `.footnote-ref`
+  markers, plate captions/numbers (`.plate`), and the pulled-quote
+  `<cite>` attributions (a citation reads as a caption on the quote).
+- **Fonts:** self-hosted, latin subset, same Fontsource source as the
+  Plex Mono files — `static/fonts/IBMPlexSerif-{Light,Regular,Italic}.woff2`
+  (300 / 400 / 400-italic). `@font-face` blocks sit under the Plex Mono
+  ones in `style.css`. Preloaded on post pages only (`single.html`,
+  beside the Italic preload).
+- **`--font-serif`** lives in its **own `:root`**, deliberately OUTSIDE
+  the pinned token block, with a comment — a future re-sync of the
+  handoff `tokens.css` into the pinned block won't drop it. It is a local
+  addition, not a handoff token.
+- **Reconcile later (owner):** the "don'ts" list still reads "No second
+  typeface," and the Brand Book is the law of record. Code and law
+  currently disagree by intent; the owner will square them.
+- Verified against a plain `hugo` build: clean, essay includes, serif
+  scoped to prose, chrome mono, non-writing pages and the unlisted
+  invariants (sitemap/RSS absence) unchanged.
+
 ## flags for right now — read before touching
 
 1. **`set in berkeley mono · handmade` is COMMENTED OUT** (Go template

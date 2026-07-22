@@ -38,6 +38,40 @@
   src: url("/fonts/IBMPlexMono-Italic.woff2") format("woff2");
 }
 
+/* ---- serif tier (added 22 vii 2026): the article body reads in
+   IBM Plex Serif; the chrome (breadcrumb, kicker, dateline, section
+   markers, footnotes, captions) stays mono. Self-hosted, latin subset,
+   same source as the Plex Mono files above. Light 300 for the title,
+   Regular 400 for the body, Italic 400 for the preface & pulled quotes. */
+@font-face {
+  font-family: "IBM Plex Serif";
+  font-style: normal;
+  font-weight: 300;
+  font-display: swap;
+  src: url("/fonts/IBMPlexSerif-Light.woff2") format("woff2");
+}
+@font-face {
+  font-family: "IBM Plex Serif";
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("/fonts/IBMPlexSerif-Regular.woff2") format("woff2");
+}
+@font-face {
+  font-family: "IBM Plex Serif";
+  font-style: italic;
+  font-weight: 400;
+  font-display: swap;
+  src: url("/fonts/IBMPlexSerif-Italic.woff2") format("woff2");
+}
+
+/* --font-serif is a LOCAL addition — NOT part of the pinned handoff
+   tokens below. Kept in its own :root so a future re-sync of tokens.css
+   into the pinned block cannot silently drop it. */
+:root {
+  --font-serif: "IBM Plex Serif", Georgia, "Times New Roman", serif;
+}
+
 /* ============================================================
    njk. — design tokens (PINNED · 13 July 2026)
    The public sibling of form_. One room, dark-first.
@@ -402,6 +436,7 @@ body {
 
 .post-title {
   margin: 18px 0 0;
+  font-family: var(--font-serif);
   font-size: var(--fs-title);
   font-weight: 300;
   letter-spacing: -0.01em;
@@ -426,8 +461,13 @@ body {
 }
 
 /* ---- prose: hierarchy by rhythm, not scale ------------------- */
+/* the running body reads in serif (22 vii 2026); the preface and
+   pulled quotes inherit it and, being already italic, resolve to
+   serif-italic. Apparatus inside .prose (## markers, notes, plate
+   captions, cite) is re-asserted to --font-mono below. */
 .prose {
   margin-top: 44px;
+  font-family: var(--font-serif);
   font-size: var(--fs-body);
   line-height: var(--lh-body);
   color: var(--ink-body);
@@ -446,8 +486,10 @@ body {
 
 .prose a:hover { color: var(--t-violet); }
 
-/* ## section markers — label style in violet; the ## ships as content */
+/* ## section markers — label style in violet; the ## ships as content.
+   mono re-asserted: labels stay typed even though .prose is now serif */
 .prose h2 {
+  font-family: var(--font-mono);
   font-size: var(--fs-label);
   font-weight: var(--fw-label);
   letter-spacing: var(--ls-label);
@@ -478,6 +520,7 @@ body {
 .prose blockquote p { margin: 0; }
 
 .prose blockquote cite {
+  font-family: var(--font-mono);
   font-style: normal;
   color: var(--ink-faint);
 }
@@ -494,6 +537,8 @@ body {
   flex-direction: column;
   gap: 14px;
   overflow: hidden;
+  /* plates sit inside .prose (serif) but are apparatus — keep them typed */
+  font-family: var(--font-mono);
 }
 
 .plate img {
@@ -604,6 +649,7 @@ body {
 
 .prose .footnote-ref {
   padding-left: 2px;
+  font-family: var(--font-mono);
   font-size: 0.6875rem;
   font-weight: 600;
   color: var(--t-violet);
@@ -615,6 +661,8 @@ body {
   margin-top: 56px;
   padding-top: 28px;
   border-top: 1px solid var(--hairline);
+  /* the log stays typed even though the body above is now serif */
+  font-family: var(--font-mono);
 }
 
 .prose .footnotes hr { display: none; }
